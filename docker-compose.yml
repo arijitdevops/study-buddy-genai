@@ -1,0 +1,77 @@
+# Study Buddy GenAI -- local stack.
+#
+#   docker compose up --build
+#
+# MySQL comes up first and the backend waits for its healthcheck, so table
+# creation on startup never races an unready database.
+
+services:
+  mysql:
+    image: mysql:8.4
+    container_name: study-buddy-mysql
+    restart: unless-stopped
+    environment:
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:-password}
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-study_buddy}
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      # Fallback DDL, applied only when the data directory is empty.
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql:ro
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-p${MYSQL_ROOT_PASSWORD:-password}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+      start_period: 30s
+
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: study-buddy-backend
+    restart: unless-stopped
+    depends_on:
+      mysql:
+        condition: service_healthy
+    environment:
+      DATABASE_URL: mysql+asyncmy://root:${MYSQL_ROOT_PASSWORD:-password}@mysql:3306/${MYSQL_DATABASE:-study_buddy}
+      GEMINI_API_KEY: ${GEMINI_API_KEY:-}
+      GEMINI_MODEL: ${GEMINI_MODEL:-gemini-2.5-flash}
+      GEMINI_VISION_MODEL: ${GEMINI_VISION_MODEL:-gemini-2.5-flash}
+      GEMINI_GUARD_MODEL: ${GEMINI_GUARD_MODEL:-gemini-2.5-flash}
+      TAVILY_API_KEY: ${TAVILY_API_KEY:-}
+      SERPER_API_KEY: ${SERPER_API_KEY:-}
+      ENABLE_WEB_SEARCH: ${ENABLE_WEB_SEARCH:-true}
+      WEB_SEARCH_PROVIDER: ${WEB_SEARCH_PROVIDER:-auto}
+      UPLOAD_DIR: /app/uploads
+      MAX_UPLOAD_MB: ${MAX_UPLOAD_MB:-15}
+      MAX_FILES_PER_SESSION: ${MAX_FILES_PER_SESSION:-10}
+      CORS_ORIGINS: ${CORS_ORIGINS:-http://localhost:5173,http://localhost:8080}
+      RATE_LIMIT_PER_MINUTE: ${RATE_LIMIT_PER_MINUTE:-30}
+      SESSION_SECRET: ${SESSION_SECRET:-change_me_in_production}
+      LOG_LEVEL: ${LOG_LEVEL:-INFO}
+      DEFAULT_GRADE: ${DEFAULT_GRADE:-8}
+    ports:
+      - "8000:8000"
+    volumes:
+      - uploads_data:/app/uploads
+
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: study-buddy-frontend
+    restart: unless-stopped
+    depends_on:
+      - backend
+    ports:
+      - "8080:80"
+
+volumes:
+  mysql_data:
+  uploads_data:

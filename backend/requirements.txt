@@ -1,0 +1,35 @@
+# --- Web framework ---
+fastapi==0.141.1
+uvicorn[standard]==0.53.0
+python-multipart==0.0.32
+
+# --- Configuration ---
+pydantic==2.13.5
+pydantic-settings==2.15.0
+python-dotenv==1.2.3
+
+# --- Database (MySQL via asyncmy; SQLite via aiosqlite for tests / quick local runs) ---
+SQLAlchemy==2.0.54
+asyncmy==0.2.15
+aiosqlite==0.22.1
+alembic==1.20.0
+cryptography==50.0.1
+
+# --- Google Gemini ---
+google-genai==2.25.0
+
+# --- Agent orchestration ---
+langgraph==1.2.12
+langchain-core==1.6.4
+
+# --- HTTP + tools (ddgs = keyless DuckDuckGo web search) ---
+httpx==0.28.1
+ddgs==9.16.0
+
+# --- Document extraction ---
+pypdf==6.19.0
+python-docx==1.2.0
+
+# --- Tests ---
+pytest==9.1.1
+pytest-asyncio==1.4.0

@@ -1,0 +1,42 @@
+# --- Python ---
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+htmlcov/
+.coverage
+*.log
+
+# --- Node ---
+node_modules/
+dist/
+dist-ssr/
+.vite/
+npm-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+
+# --- Environment ---
+.env
+.env.*
+!.env.example
+backend/.env
+frontend/.env
+
+# --- Runtime data ---
+uploads/
+backend/uploads/
+*.sqlite
+*.db
+
+# --- Editors / OS ---
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+*.swp

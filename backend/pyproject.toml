@@ -1,0 +1,83 @@
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "study-buddy-genai-backend"
+version = "0.1.0"
+description = "Guardrailed study assistant for school students: FastAPI + LangGraph + Gemini + MySQL"
+readme = "../README.md"
+requires-python = ">=3.10"
+license = { file = "../LICENSE" }
+authors = [{ name = "Study Buddy GenAI contributors" }]
+keywords = ["gemini", "langgraph", "fastapi", "education", "guardrails"]
+classifiers = [
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Framework :: FastAPI",
+    "Topic :: Education",
+]
+
+# The pinned, install-time source of truth is requirements.txt.
+# These ranges exist so `pip install -e backend` also works.
+dependencies = [
+    "fastapi>=0.141,<0.142",
+    "uvicorn[standard]>=0.53",
+    "python-multipart>=0.0.32",
+    "pydantic>=2.13,<3",
+    "pydantic-settings>=2.15,<3",
+    "python-dotenv>=1.2",
+    "SQLAlchemy>=2.0.54,<2.1",
+    "asyncmy>=0.2.15",
+    "aiosqlite>=0.22",
+    "alembic>=1.20,<2",
+    "cryptography>=50",
+    "google-genai>=2.25,<3",
+    "langgraph>=1.2,<2",
+    "langchain-core>=1.6,<2",
+    "httpx>=0.28,<0.29",
+    "ddgs>=9.16",
+    "pypdf>=6.19",
+    "python-docx>=1.2",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=9.1",
+    "pytest-asyncio>=1.4",
+    "ruff>=0.8",
+    "mypy>=1.13",
+]
+
+[project.urls]
+Repository = "https://github.com/your-org/study-buddy-genai"
+
+[tool.setuptools.packages.find]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+pythonpath = ["."]
+filterwarnings = ["ignore::DeprecationWarning"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "B", "UP", "ANN", "D"]
+ignore = ["ANN101", "ANN102", "ANN401", "D203", "D213"]
+
+[tool.ruff.lint.per-file-ignores]
+"tests/*" = ["D", "ANN"]
+"alembic/*" = ["D", "ANN"]
+
+[tool.mypy]
+python_version = "3.10"
+warn_unused_ignores = false
+ignore_missing_imports = true
+disallow_untyped_defs = true
+exclude = ["alembic/"]

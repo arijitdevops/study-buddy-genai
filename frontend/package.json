@@ -1,0 +1,36 @@
+{
+  "name": "study-buddy-genai-frontend",
+  "private": true,
+  "version": "0.1.0",
+  "type": "module",
+  "description": "React + TypeScript client for the Study Buddy GenAI study assistant",
+  "scripts": {
+    "dev": "vite",
+    "build": "tsc --noEmit && tsc -p tsconfig.node.json && vite build",
+    "preview": "vite preview",
+    "typecheck": "tsc --noEmit && tsc -p tsconfig.node.json"
+  },
+  "dependencies": {
+    "highlight.js": "^11.12.0",
+    "katex": "^0.18.7",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0",
+    "react-markdown": "^10.1.0",
+    "react-router-dom": "^7.18.4",
+    "rehype-highlight": "^7.0.2",
+    "rehype-katex": "^7.0.1",
+    "remark-gfm": "^4.0.1",
+    "remark-math": "^6.0.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.4",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
+    "@vitejs/plugin-react": "^6.1.1",
+    "typescript": "^6.0.3",
+    "vite": "^8.3.0"
+  },
+  "engines": {
+    "node": ">=20.19.0"
+  }
+}
